@@ -8,11 +8,11 @@ import 'package:eios/data/models/student_semestr.dart';
 import 'package:eios/data/models/student_semestr_with_disciplines.dart';
 
 class BrsRepository {
-  final _dio = ApiClient().dio;
+  final _api = ApiClient();
 
   Future<List<StudentSemestr>> getStudentSemestr() async {
     try {
-      final response = await _dio.get('/v1/StudentSemester');
+      final response = await _api.get('/v1/StudentSemester');
 
       if (response.data is List) {
         return (response.data as List)
@@ -28,7 +28,7 @@ class BrsRepository {
 
   Future<StudentRatingPlan> getStudentRatingPlan({required int id}) async {
     try {
-      final response = await _dio.get(
+      final response = await _api.get(
         '/v2/StudentRatingPlan',
         queryParameters: {'id': id},
       );
@@ -43,7 +43,7 @@ class BrsRepository {
     required int period,
   }) async {
     try {
-      final response = await _dio.get(
+      final response = await _api.get(
         '/v1/StudentSemester',
         queryParameters: {'year': year, 'period': period},
       );
@@ -57,7 +57,7 @@ class BrsRepository {
     required String code,
   }) async {
     try {
-      final response = await _dio.post(
+      final response = await _api.post(
         '/v1/StudentAttendanceCode',
         queryParameters: {'code': code},
       );
@@ -69,7 +69,7 @@ class BrsRepository {
 
   Future<List<Message>> getMessages({required int disciplineId}) async {
     try {
-      final response = await _dio.get(
+      final response = await _api.get(
         '/v1/ForumMessage',
         queryParameters: {'disciplineId': disciplineId},
       );
@@ -93,7 +93,7 @@ class BrsRepository {
     required String messageText,
   }) async {
     try {
-      final response = await _dio.post(
+      final response = await _api.post(
         '/v1/ForumMessage/',
         queryParameters: {
           'disciplineId': disciplineId
@@ -113,7 +113,7 @@ class BrsRepository {
 
   Future<void> deleteMessage({required int id}) async {
     try {
-      final response = await _dio.delete(
+      final response = await _api.delete(
         '/v1/ForumMessage',
         queryParameters: {'id': id},
       );

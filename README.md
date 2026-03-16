@@ -1,23 +1,155 @@
-# eios
+# mobile_eios
 
-Flutter client for EIOS MRSU.
+Мобильный Flutter-клиент для ЭИОС МГУ им. Н.П. Огарева.
 
-## Local setup
+Приложение предназначено для входа в личный кабинет студента, просмотра расписания, профиля, успеваемости, тестов по дисциплинам и отметки посещаемости по QR-коду.
 
-Create a local `.env` file in the project root before running the app. The file
-is ignored by Git and must contain:
+## Что умеет приложение
+
+- Авторизация через учетную запись ЭИОС.
+- Автоматическое сохранение токенов и обновление сессии по `refresh_token`.
+- Просмотр расписания в календарном формате.
+- Просмотр профиля пользователя.
+- Просмотр дисциплин и рейтинг-планов.
+- Прохождение тестов по дисциплинам.
+- Отметка посещаемости через QR-сканер.
+- Работа с сообщениями внутри отдельных учебных модулей.
+
+## Стек
+
+- `Flutter`
+- `Dart`
+- `flutter_bloc` / `bloc` для управления состоянием
+- `dio` для работы с API
+- `flutter_secure_storage` для хранения токенов
+- `flutter_dotenv` для конфигурации через `.env`
+- `table_calendar` для календаря расписания
+- `mobile_scanner` для QR-сканирования
+
+## Как устроен проект
+
+Основные директории:
+
+- `lib/core` - тема, навигация, сеть, исключения
+- `lib/data` - модели, репозитории, хранилище токенов
+- `lib/presentation` - экраны и BLoC
+- `images` - графические assets
+- `ios`, `android` - нативные проекты платформ
+
+Ключевые экраны:
+
+- `Вход`
+- `Расписание`
+- `Профиль`
+- `Успеваемость`
+- `Тесты по дисциплинам`
+- `Посещаемость по QR`
+
+## Переменные окружения
+
+Перед запуском нужно создать файл `.env` в корне проекта.
+
+Можно взять за основу `.env.example`:
 
 ```env
-CLIENT_ID=your_client_id_here
-CLIENT_SECRET=your_client_secret_here
+CLIENT_ID=your_client_id
+CLIENT_SECRET=your_client_secret
 ```
 
-You can copy the values from `.env.example` and replace them with the real
-credentials for your environment.
+Приложение использует эти значения для авторизации и обновления токенов.
 
-## Run
+
+## Запуск на iPhone
+
+### 1. Подготовить Mac и iPhone
+
+1. Установить Xcode из App Store.
+2. Установить CocoaPods, если он еще не установлен:
+
+```bash
+sudo gem install cocoapods
+```
+
+3. Подключить iPhone кабелем к Mac.
+4. Разблокировать iPhone и нажать `Trust`, если появится запрос.
+5. На iPhone включить `Developer Mode`:
+   `Settings -> Privacy & Security -> Developer mode`.
+6. В Xcode добавить свой Apple ID:
+   `Xcode -> Settings -> Accounts`.
+
+### 2. Подготовить проект
+
+Из корня проекта выполнить:
 
 ```bash
 flutter pub get
-flutter run
+cd ios
+pod install
+cd ..
+open ios/Runner.xcworkspace
 ```
+
+Важно:
+
+- открывать нужно именно `ios/Runner.xcworkspace`
+- не открывать `ios/Runner.xcodeproj`, иначе CocoaPods-конфигурация может не подтянуться
+
+### 3. Настроить подпись в Xcode
+
+1. В левой панели Xcode выбрать `Runner`.
+2. В секции `TARGETS` выберать `Runner`.
+3. Открыть вкладку `Signing & Capabilities`.
+4. Включить `Automatically manage signing`.
+5. В поле `Team` выберать свой Apple ID / Personal Team.
+6. Указать уникальный `Bundle Identifier`, например:
+   `ru.d0ckyy.eios`
+
+Если Xcode предложит `Fix Issue`, нажать эту кнопку.
+
+### 4. Запустить на устройстве
+
+1. В верхней панели Xcode выбрать свой iPhone как target.
+2. Нажать `Run` или `Cmd + R`.
+3. Если iPhone заблокирует запуск приложения, открыть:
+   `Settings -> General -> VPN and device management`
+   и довериться сертификату разработчика.
+4. Запустить приложение повторно.
+
+После первой успешной настройки подписи можно запускать и из терминала:
+
+```bash
+flutter devices
+flutter run -d <device_id>
+```
+
+## Полезные команды
+
+```bash
+flutter pub get
+flutter analyze
+flutter run
+flutter build apk
+flutter build ios --no-codesign
+```
+
+Если `flutter` не добавлен в `PATH`:
+
+```bash
+$HOME/flutter/bin/flutter analyze
+```
+
+## О проекте
+
+- Авторизация и обновление токенов реализованы через `Dio` и `OAuth/Token`.
+- Токены сохраняются в `FlutterSecureStorage`.
+- Начальный экран выбирается по наличию сохраненного access token.
+- Основная навигация после входа идет через нижние табы.
+- iOS-проект зависит от CocoaPods, поэтому после изменений в iOS-части может понадобиться `pod install`.
+
+## Основные файлы
+
+- `lib/main.dart`
+- `lib/core/network/api_service.dart`
+- `lib/data/repositories/auth_repository.dart`
+- `lib/presentation/screens/login/login_screen.dart`
+- `lib/presentation/screens/tabs_screen.dart`

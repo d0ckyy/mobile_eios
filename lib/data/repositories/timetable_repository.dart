@@ -4,13 +4,13 @@ import 'package:eios/data/models/student_rating_plan.dart';
 import 'package:eios/data/models/student_time_table.dart';
 
 class TimetableRepository {
-  final _dio = ApiClient().dio;
+  final _api = ApiClient();
 
   Future<List<StudentTimeTable>> getStudentTimeTable({
     required String date,
   }) async {
     try {
-      final response = await _dio.get(
+      final response = await _api.get(
         '/v1/StudentTimeTable',
         queryParameters: {'date': date},
       );
@@ -33,7 +33,7 @@ class TimetableRepository {
 
   Future<StudentRatingPlan> getRatingPlan(int disciplineId) async {
     try {
-      final response = await _dio.get(
+      final response = await _api.get(
         '/v2/StudentRatingPlan/',
         queryParameters: {'id': disciplineId},
       );

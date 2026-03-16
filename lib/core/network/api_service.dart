@@ -16,6 +16,7 @@ class ApiClient {
   final String baseUrl = 'https://papi.mrsu.ru';
 
   bool _isLoggingOut = false;
+  Future<void> _requestChain = Future<void>.value();
 
   void init() {
     dio = Dio(
@@ -77,6 +78,82 @@ class ApiClient {
     dio.interceptors.add(LogInterceptor(responseBody: true, requestBody: true));
   }
 
+  Future<Response<T>> get<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) {
+    return _enqueueRequest(
+      () => dio.get<T>(
+        path,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      ),
+    );
+  }
+
+  Future<Response<T>> post<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) {
+    return _enqueueRequest(
+      () => dio.post<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      ),
+    );
+  }
+
+  Future<Response<T>> put<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) {
+    return _enqueueRequest(
+      () => dio.put<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      ),
+    );
+  }
+
+  Future<Response<T>> delete<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) {
+    return _enqueueRequest(
+      () => dio.delete<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      ),
+    );
+  }
+
+  Future<T> _enqueueRequest<T>(Future<T> Function() action) {
+    final next = _requestChain.then((_) => action());
+    _requestChain = next.then<void>((_) {}, onError: (_) {});
+    return next;
+  }
+
   Future<AccessToken> _refreshTokens(String refreshToken) async {
     final refreshDio = Dio(BaseOptions(baseUrl: 'https://p.mrsu.ru/'));
 
@@ -106,9 +183,9 @@ class ApiClient {
     log("LOG: Принудительный выход из системы");
     await TokenStorage.logout();
 
-    final context = navigatorKey.currentContext;
-    if (context != null) {
-      Navigator.of(context).pushAndRemoveUntil(
+    final navigator = navigatorKey.currentState;
+    if (navigator != null) {
+      navigator.pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const LoginScreen()),
         (route) => false,
       );

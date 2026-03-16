@@ -12,6 +12,10 @@ class ForbiddenException extends AppException {
   ForbiddenException(String message) : super(message, 403);
 }
 
+class LockedException extends AppException {
+  LockedException(String message) : super(message, 423);
+}
+
 class NotFoundException extends AppException {
   NotFoundException(String message) : super(message, 404);
 }

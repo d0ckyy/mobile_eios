@@ -146,106 +146,42 @@ class _LoginViewState extends State<_LoginView>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 12,
-                                          vertical: 8,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.surfaceMuted,
-                                          borderRadius: BorderRadius.circular(
-                                            999,
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          'MRSU · ЭИОС',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.deepBlue,
-                                            letterSpacing: 0.4,
-                                          ),
-                                        ),
-                                      ),
                                       const SizedBox(height: 20),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: 72,
-                                            height: 72,
-                                            padding: const EdgeInsets.all(14),
-                                            decoration: BoxDecoration(
-                                              color: AppColors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(22),
-                                              border: Border.all(
-                                                color: AppColors.outline,
-                                              ),
-                                            ),
-                                            child: Image.asset(
-                                              'images/logo_mrsu.png',
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  'Учебный кабинет',
-                                                  style: Theme.of(
-                                                    context,
-                                                  ).textTheme.headlineSmall,
-                                                ),
-                                                const SizedBox(height: 8),
-                                                Text(
-                                                  'Минималистичный вход в ЭИОС с быстрым доступом к расписанию, профилю и успеваемости.',
-                                                  style: Theme.of(
-                                                    context,
-                                                  ).textTheme.bodyMedium,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 28),
-                                      Container(
-                                        padding: const EdgeInsets.all(18),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.deepBlue,
-                                          borderRadius: BorderRadius.circular(
-                                            22,
-                                          ),
-                                        ),
-                                        child: Row(
+                                      Center(
+                                        child: Column(
                                           children: [
                                             Container(
-                                              width: 10,
-                                              height: 10,
-                                              decoration: const BoxDecoration(
-                                                color: AppColors.lemon,
-                                                shape: BoxShape.circle,
+                                              width: 72,
+                                              height: 72,
+                                              padding: const EdgeInsets.all(4),
+                                              child: Image.asset(
+                                                'images/logo_mrsu.png',
+                                                fit: BoxFit.contain,
                                               ),
                                             ),
-                                            const SizedBox(width: 10),
-                                            Expanded(
-                                              child: Text(
-                                                'Используйте корпоративный логин и пароль.',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium
-                                                    ?.copyWith(
-                                                      color: AppColors.white
-                                                          .withValues(
-                                                            alpha: 0.86,
-                                                          ),
-                                                    ),
-                                              ),
+                                            const SizedBox(height: 12),
+                                            Text(
+                                              'МГУ им. Н.П. Огарева',
+                                              textAlign: TextAlign.center,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium
+                                                  ?.copyWith(
+                                                    color: AppColors.ink,
+                                                  ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              'ЭИОС',
+                                              textAlign: TextAlign.center,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                    color: AppColors.mutedText,
+                                                    letterSpacing: 1.2,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
                                             ),
                                           ],
                                         ),

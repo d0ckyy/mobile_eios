@@ -91,7 +91,7 @@ class _MessagesViewState extends State<_MessagesView> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Форум'),
+            const Text('Общение'),
             Text(
               widget.disciplineName,
               style: Theme.of(context).textTheme.bodySmall,

@@ -2,6 +2,7 @@ import 'package:eios/data/models/discipline.dart';
 import 'package:eios/data/models/record_book.dart';
 import 'package:eios/core/theme/app_theme.dart';
 import 'package:eios/presentation/screens/messages/messages_screen.dart';
+import 'package:eios/presentation/screens/discipline_tests/discipline_tests_screen.dart';
 import 'package:eios/presentation/screens/rating_plan/rating_plan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -319,56 +320,57 @@ class _DisciplineCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 10,
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: Text(
           discipline.title ?? "Без названия",
           style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                if (discipline.specialty != null)
-                  _InfoChip(
-                    icon: Icons.school_outlined,
-                    label: discipline.specialty!,
-                  ),
-                if (hasMessages)
-                  _InfoChip(
-                    icon: Icons.forum_outlined,
-                    label: 'Сообщений: ${discipline.unreadedMessageCount}',
-                    accent: AppColors.magenta,
-                  ),
-              ],
-            ),
-          ],
-        ),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            IconButton(
-              icon: Badge(
-                isLabelVisible: hasMessages,
-                backgroundColor: AppColors.magenta,
-                label: Text(
-                  '${discipline.unreadedMessageCount ?? 0}',
-                  style: const TextStyle(fontSize: 10),
+        subtitle: hasMessages
+            ? Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: _InfoChip(
+                  icon: Icons.forum_outlined,
+                  label: 'Сообщений: ${discipline.unreadedMessageCount}',
+                  accent: AppColors.magenta,
                 ),
-                child: Icon(
-                  hasMessages ? Icons.forum_rounded : Icons.forum_outlined,
-                  color: hasMessages ? AppColors.magenta : AppColors.mutedText,
+              )
+            : null,
+        trailing: SizedBox(
+          width: 40,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => _openMessages(context),
+                borderRadius: BorderRadius.circular(14),
+                child: Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Badge(
+                    isLabelVisible: hasMessages,
+                    backgroundColor: AppColors.magenta,
+                    label: Text(
+                      '${discipline.unreadedMessageCount ?? 0}',
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                    child: Icon(
+                      hasMessages ? Icons.forum_rounded : Icons.forum_outlined,
+                      size: 22,
+                      color: hasMessages
+                          ? AppColors.magenta
+                          : AppColors.mutedText,
+                    ),
+                  ),
                 ),
               ),
-              onPressed: () => _openMessages(context),
-              tooltip: 'Форум',
             ),
-            _buildBadge(discipline.unreadedCount),
-          ],
+          ),
         ),
         onTap: () => _showActions(context),
       ),
@@ -397,6 +399,7 @@ class _DisciplineCard extends StatelessWidget {
 
   void _showActions(BuildContext context) {
     final hasMessages = (discipline.unreadedMessageCount ?? 0) > 0;
+    final canOpenTests = discipline.id != null;
 
     showModalBottomSheet(
       context: context,
@@ -458,6 +461,40 @@ class _DisciplineCard extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
+                    color: AppColors.lemon.withValues(alpha: 0.35),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: const Icon(
+                    Icons.quiz_outlined,
+                    color: AppColors.deepBlue,
+                  ),
+                ),
+                title: const Text('Тесты'),
+                subtitle: const Text('Доступные тесты по дисциплине'),
+                trailing: const Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppColors.mutedText,
+                ),
+                onTap: canOpenTests
+                    ? () {
+                        Navigator.pop(sheetCtx);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => DisciplineTestsScreen(
+                              disciplineId: discipline.id!,
+                              disciplineName: discipline.title ?? 'Дисциплина',
+                            ),
+                          ),
+                        );
+                      }
+                    : null,
+              ),
+              ListTile(
+                leading: Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
                     color: AppColors.magenta.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(14),
                   ),
@@ -470,11 +507,11 @@ class _DisciplineCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                title: const Text('Форум'),
+                title: const Text('Общение'),
                 subtitle: Text(
                   hasMessages
                       ? 'Новых сообщений: ${discipline.unreadedMessageCount}'
-                      : 'Обсуждение дисциплины',
+                      : 'Чат по дисциплине',
                 ),
                 trailing: hasMessages
                     ? Container(

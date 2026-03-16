@@ -73,13 +73,8 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
     emit(state.copyWith(status: MessagesStatus.loading, clearError: true));
 
     try {
-      final results = await Future.wait([
-        _resolveUserId(),
-        _fetchSorted(),
-      ]);
-
-      final userId = results[0] as String?;
-      final messages = results[1] as List;
+      final userId = await _resolveUserId();
+      final messages = await _fetchSorted();
 
       emit(state.copyWith(
         status: MessagesStatus.loaded,
