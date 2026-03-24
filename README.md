@@ -150,3 +150,4 @@ $HOME/flutter/bin/flutter analyze
 - `lib/data/repositories/auth_repository.dart`
 - `lib/presentation/screens/login/login_screen.dart`
 - `lib/presentation/screens/tabs_screen.dart`
+ 
