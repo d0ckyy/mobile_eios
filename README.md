@@ -36,7 +36,7 @@
 - `images` - графические assets
 - `ios`, `android` - нативные проекты платформ
 
-Ключевые экраны:
+Экраны:
 
 - `Вход`
 - `Расписание`
@@ -49,7 +49,7 @@
 
 Перед запуском нужно создать файл `.env` в корне проекта.
 
-Можно взять за основу `.env.example`:
+`.env.example`:
 
 ```env
 CLIENT_ID=your_client_id
@@ -61,20 +61,19 @@ CLIENT_SECRET=your_client_secret
 
 ## Запуск на iPhone
 
-### 1. Подготовить Mac и iPhone
+### 1. Mac и iPhone
 
-1. Установить Xcode из App Store.
-2. Установить CocoaPods, если он еще не установлен:
+1. Установить CocoaPods:
 
 ```bash
 sudo gem install cocoapods
 ```
 
-3. Подключить iPhone кабелем к Mac.
-4. Разблокировать iPhone и нажать `Trust`, если появится запрос.
-5. На iPhone включить `Developer Mode`:
+2. Подключить iPhone к Mac.
+3. Разблокировать iPhone и нажать `Trust`, если появится запрос.
+4. На iPhone включить `Developer Mode`:
    `Settings -> Privacy & Security -> Developer mode`.
-6. В Xcode добавить свой Apple ID:
+5. В Xcode добавить свой Apple ID:
    `Xcode -> Settings -> Accounts`.
 
 ### 2. Подготовить проект
@@ -96,24 +95,22 @@ open ios/Runner.xcworkspace
 
 ### 3. Настроить подпись в Xcode
 
-1. В левой панели Xcode выбрать `Runner`.
+1. В левой панели выбрать `Runner`.
 2. В секции `TARGETS` выберать `Runner`.
 3. Открыть вкладку `Signing & Capabilities`.
 4. Включить `Automatically manage signing`.
-5. В поле `Team` выберать свой Apple ID / Personal Team.
+5. В поле `Team` выбрать свой Apple ID / Personal Team.
 6. Указать уникальный `Bundle Identifier`, например:
    `ru.d0ckyy.eios`
 
-Если Xcode предложит `Fix Issue`, нажать эту кнопку.
-
 ### 4. Запустить на устройстве
 
-1. В верхней панели Xcode выбрать свой iPhone как target.
+1. В верхней панели Xcode выбрать iPhone.
 2. Нажать `Run` или `Cmd + R`.
-3. Если iPhone заблокирует запуск приложения, открыть:
+3. На iPhone открыть:
    `Settings -> General -> VPN and device management`
    и довериться сертификату разработчика.
-4. Запустить приложение повторно.
+4. Запустить приложение.
 
 После первой успешной настройки подписи можно запускать и из терминала:
 

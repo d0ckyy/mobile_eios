@@ -45,7 +45,7 @@ class ApiClient {
             if (refreshToken != null && refreshToken.isNotEmpty) {
               try {
                 log(
-                  "LOG: Токен истёк, пытаюсь обновить через Refresh Token...",
+                  "LOG: Токен истёк, обновление через Refresh Token...",
                 );
 
                 final newTokens = await _refreshTokens(refreshToken);
